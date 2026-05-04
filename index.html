@@ -5,29 +5,12 @@
 
 <style>
 body {
-    font-family: Arial;
-    text-align: center;
-    background-color: #f4f7fb;
+  text-align: center;
+  font-family: Arial;
 }
 
-.container {
-    background: white;
-    width: 300px;
-    margin: auto;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-input {
-    width: 80%;
-    padding: 10px;
-    margin: 10px;
-}
-
-button {
-    padding: 10px;
-    margin: 5px;
-    cursor: pointer;
+button:hover {
+  background-color: lightblue;
 }
 </style>
 
@@ -35,58 +18,54 @@ button {
 
 <body>
 
-<div class="container">
+<h2>Calculator</h2>
 
-<h2>Simple Calculator</h2>
+<input type="number" id="n1" placeholder="Number 1"><br><br>
+<input type="number" id="n2" placeholder="Number 2"><br><br>
 
-<input type="number" id="num1" placeholder="Enter first number"><br>
-<input type="number" id="num2" placeholder="Enter second number"><br>
+<button onclick="calculate('+')">Add</button>
+<button onclick="calculate('-')">Subtract</button>
+<button onclick="calculate('*')">Multiply</button>
+<button onclick="calculate('/')">Divide</button>
+<br><br>
 
-<button onclick="add()">Add</button>
-<button onclick="sub()">Subtract</button>
-<button onclick="mul()">Multiply</button>
-<button onclick="div()">Divide</button>
+<button onclick="saveResult()">Save Result</button>
 
-<h3 id="result"></h3>
-
-</div>
+<h3 id="res"></h3>
 
 <script>
 
-// Addition
-function add() {
-    let a = parseFloat(document.getElementById("num1").value);
-    let b = parseFloat(document.getElementById("num2").value);
+let result = "";
 
-    document.getElementById("result").innerText = "Result: " + (a + b);
+// one function for all operations
+function calculate(op) {
+
+  let a = Number(document.getElementById("n1").value);
+  let b = Number(document.getElementById("n2").value);
+
+  if (op === '+') result = a + b;
+  else if (op === '-') result = a - b;
+  else if (op === '*') result = a * b;
+  else if (op === '/') {
+    if (b === 0) result = "Cannot divide by 0";
+    else result = a / b;
+  }
+
+  document.getElementById("res").innerText = "Result: " + result;
 }
 
-// Subtraction
-function sub() {
-    let a = parseFloat(document.getElementById("num1").value);
-    let b = parseFloat(document.getElementById("num2").value);
+// save result to file
+function saveResult() {
 
-    document.getElementById("result").innerText = "Result: " + (a - b);
-}
+  let content = "Result: " + result;
 
-// Multiplication
-function mul() {
-    let a = parseFloat(document.getElementById("num1").value);
-    let b = parseFloat(document.getElementById("num2").value);
+  let file = new Blob([content], { type: "text/plain" });
 
-    document.getElementById("result").innerText = "Result: " + (a * b);
-}
+  let link = document.createElement("a");
+  link.href = URL.createObjectURL(file);
+  link.download = "result.txt";
 
-// Division
-function div() {
-    let a = parseFloat(document.getElementById("num1").value);
-    let b = parseFloat(document.getElementById("num2").value);
-
-    if (b === 0) {
-        document.getElementById("result").innerText = "Cannot divide by zero";
-    } else {
-        document.getElementById("result").innerText = "Result: " + (a / b);
-    }
+  link.click();
 }
 
 </script>
